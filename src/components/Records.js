@@ -30,6 +30,18 @@ class Records extends Component {
     })
   }
 
+  addRecord (record) {
+    console.log(record)
+    this.setState({
+      records: [
+        ...this.state.records,
+        record,
+      ],
+      error: null,
+      isLoaded: true,
+    })
+  }
+
   render () {
     const {error, isLoaded, records} = this.state
     let recordsComponent
@@ -61,7 +73,7 @@ class Records extends Component {
     return (
       <div>
         <h2>Accounts</h2>
-        <RecordForm />
+        <RecordForm handleNewRecord={ this.addRecord.bind(this) } />
         { recordsComponent }
       </div>
     )
