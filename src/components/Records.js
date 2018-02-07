@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Record from './Record'
 import * as RecordsAPI from '../utils/recordsAPI'
 import RecordForm from './RecordForm'
+import AmountBox from './AmountBox'
 
 class Records extends Component {
   constructor () {
@@ -62,10 +63,35 @@ class Records extends Component {
   deleteRecord (record) {
     console.log(record)
     const recordIndex = this.state.records.indexOf(record)
-    const newRecords = this.state.records.filter((item, index) => index !== recordIndex)
+    const newRecords = this.state.records.filter(
+      (item, index) => index !== recordIndex)
     this.setState({
       records: newRecords,
     })
+  }
+
+  credit () {
+    let credit = this.state.records.filter((record) => {
+      return record.amount >= 0
+    })
+
+    return credit.reduce((prev, curr) => {
+      return prev + Number.parseInt(curr.amount, 0)
+    }, 0)
+  }
+
+  debit () {
+    let credit = this.state.records.filter((record) => {
+      return record.amount < 0
+    })
+
+    return credit.reduce((prev, curr) => {
+      return prev = Number.parseInt(curr.amount, 0)
+    }, 0)
+  }
+
+  balance () {
+    return this.credit() + this.debit()
   }
 
   render () {
@@ -106,6 +132,11 @@ class Records extends Component {
     return (
       <div>
         <h2>Accounts</h2>
+        <div className="row mb-3">
+          <AmountBox text="Credit" type="success" amount={ this.credit() } />
+          <AmountBox text="Debit" type="danger" amount={ this.debit() } />
+          <AmountBox text="Balance" type="info" amount={ this.balance() } />
+        </div>
         <RecordForm handleNewRecord={ this.addRecord.bind(this) } />
         { recordsComponent }
       </div>
