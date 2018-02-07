@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Record from './Record'
 import * as RecordsAPI from '../utils/recordsAPI'
+import RecordForm from './RecordForm'
 
 class Records extends Component {
   constructor () {
@@ -31,15 +32,15 @@ class Records extends Component {
 
   render () {
     const {error, isLoaded, records} = this.state
+    let recordsComponent
 
     if (error) {
-      return <div>Error: { error.message }</div>
+      recordsComponent = <div>Error: { error.message }</div>
     } else if (!isLoaded) {
-      return <div>Loading...</div>
+      recordsComponent = <div>Loading...</div>
     } else {
-      return (
+      recordsComponent = (
         <div className="App">
-          <h2>Accounts</h2>
           <table className="table table-bordered">
             <thead>
             <tr>
@@ -56,6 +57,14 @@ class Records extends Component {
         </div>
       )
     }
+
+    return (
+      <div>
+        <h2>Accounts</h2>
+        <RecordForm />
+        { recordsComponent }
+      </div>
+    )
   }
 }
 
